@@ -24,11 +24,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const articulo = __importStar(require("../controllers/ArticuloCtrl"));
+const authController = __importStar(require("../controllers/AuthCtrl"));
 const router = (0, express_1.Router)();
-router.get("/api/articulos", articulo.getArticulos);
-router.get("/api/articulos/:id", articulo.getArticuloXID);
-router.post("/api/articulos/insert", articulo.insertArticulo);
-router.put("/api/articulos/update", articulo.actualizarArticulo);
-router.delete("/api/articulos/delete/:id", articulo.eliminarArticulo);
+router.post("/auth/register", authController.register);
+router.post("/auth/login", authController.login);
+router.post("/auth/logout", authController.logout);
 exports.default = router;

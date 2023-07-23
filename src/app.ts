@@ -2,6 +2,7 @@ import express from "express";
 import http from "http";
 const app = express();
 import routes from "./routes/articulo";
+import authRoutes from "./routes/auth";
 
 // ADD THIS
 var cors = require("cors");
@@ -14,6 +15,7 @@ import { cxMysql } from "./database/db";
 cxMysql.getConnection;
 
 app.use(routes);
+app.use(authRoutes);
 
 var server = http.createServer(app);
 var port: string = process.env.PORT || "5000";
