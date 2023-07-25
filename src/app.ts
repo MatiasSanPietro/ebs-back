@@ -3,6 +3,7 @@ import http from "http";
 const app = express();
 import routes from "./routes/articulo";
 import authRoutes from "./routes/auth";
+import pedidoController from "./routes/pedido";
 
 // ADD THIS
 var cors = require("cors");
@@ -16,6 +17,7 @@ cxMysql.getConnection;
 
 app.use(routes);
 app.use(authRoutes);
+app.use(pedidoController);
 
 var server = http.createServer(app);
 var port: string = process.env.PORT || "5000";
