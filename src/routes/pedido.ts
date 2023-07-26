@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/api/pedidos", pedidoController.getPedidos);
 router.get("/api/pedidos/:id", pedidoController.getPedidoXID);
+router.get("/api/pedidos/user/:userId", pedidoController.getLastPedidoByUserId);
 router.post("/api/pedidos/insert", pedidoController.insertPedido);
 router.put("/api/pedidos/update", pedidoController.actualizarPedido);
 router.delete("/api/pedidos/delete/:id", pedidoController.eliminarPedido);

@@ -156,10 +156,35 @@ export const eliminarPedido = (req: Request, res: Response) =>
     });
   });
 
+// Obtener el último pedido por usuario ID
+export const getLastPedidoByUserId = (req: Request, res: Response) => {
+  const userId = parseInt(req.params.userId);
+  cxMysql.getConnection((err, connection) => {
+    if (err) {
+      console.error(err);
+      res.send(err);
+      return;
+    }
+    connection.query(
+      "SELECT * FROM pedido WHERE usuario_id = ? ORDER BY id DESC LIMIT 1",
+      [userId],
+      (err, results) => {
+        if (err) {
+          console.error(err);
+          res.send(err);
+        } else {
+          res.send(results);
+        }
+      }
+    );
+  });
+};
+
 export default {
   getPedidos,
   getPedidoXID,
   insertPedido,
   actualizarPedido,
   eliminarPedido,
+  getLastPedidoByUserId,
 };
