@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarPedido = exports.actualizarPedido = exports.insertPedido = exports.getPedidoXID = exports.getPedidos = void 0;
 const db_1 = require("../database/db");
+// Obtener todos los pedidos
 const getPedidos = (_req, res) => new Promise((_resolve, _reject) => {
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
@@ -10,7 +11,7 @@ const getPedidos = (_req, res) => new Promise((_resolve, _reject) => {
             return;
         }
         console.log("MySQL Connection: ", connection.threadId);
-        connection.query("SELECT * FROM pedido LIMIT 50", (err, results) => {
+        connection.query("SELECT * FROM pedido", (err, results) => {
             if (err)
                 console.error(err);
             res.send(results);
@@ -18,15 +19,16 @@ const getPedidos = (_req, res) => new Promise((_resolve, _reject) => {
     });
 });
 exports.getPedidos = getPedidos;
-const getPedidoXID = (req, res) => new Promise((resolve, reject) => {
-    const idPedido = parseInt(req.params.id);
+// Obtener un pedido por su ID
+const getPedidoXID = (req, res) => new Promise((_resolve, _reject) => {
+    const pedidoId = parseInt(req.params.id);
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
             console.error(err);
             res.send(err);
             return;
         }
-        connection.query("SELECT * FROM pedido WHERE id = ?", [idPedido], (err, results) => {
+        connection.query("SELECT * FROM pedido WHERE id = ?", [pedidoId], (err, results) => {
             if (err)
                 console.error(err);
             res.send(results);
@@ -34,15 +36,19 @@ const getPedidoXID = (req, res) => new Promise((resolve, reject) => {
     });
 });
 exports.getPedidoXID = getPedidoXID;
+// Insertar un nuevo pedido
 const insertPedido = (req, res) => new Promise((resolve, reject) => {
-    const { articulo_id, usuario_id, estado, fecha_pedido, cantidad, precio_unitario, } = req.body;
+    const { usuario_id, fecha_pedido, telefono, direccion, metodo_pago, nombre_usuario, articulos, total, estado, } = req.body;
     var values = [
-        articulo_id,
         usuario_id,
-        estado,
         fecha_pedido,
-        cantidad,
-        precio_unitario,
+        telefono,
+        direccion,
+        metodo_pago,
+        nombre_usuario,
+        articulos,
+        total,
+        estado,
     ];
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
@@ -51,29 +57,33 @@ const insertPedido = (req, res) => new Promise((resolve, reject) => {
             return;
         }
         else {
-            let sql = "INSERT INTO pedido(articulo_id, usuario_id, estado, fecha_pedido, cantidad, precio_unitario) VALUES (?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO pedido (usuario_id, fecha_pedido, telefono, direccion, metodo_pago, nombre_usuario, articulos, total, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     console.error(err);
                     res.json({ message: "Error al tratar de insertar" });
                 }
                 else {
-                    res.json({ message: "Pedido Insertado con exito" });
+                    res.json({ message: "Pedido Insertado con éxito" });
                 }
             });
         }
     });
 });
 exports.insertPedido = insertPedido;
+// Actualizar un pedido existente
 const actualizarPedido = (req, res) => new Promise((resolve, reject) => {
-    const { articulo_id, usuario_id, estado, fecha_pedido, cantidad, precio_unitario, id, } = req.body;
+    const { usuario_id, fecha_pedido, telefono, direccion, metodo_pago, nombre_usuario, articulos, total, estado, id, } = req.body;
     var values = [
-        articulo_id,
         usuario_id,
-        estado,
         fecha_pedido,
-        cantidad,
-        precio_unitario,
+        telefono,
+        direccion,
+        metodo_pago,
+        nombre_usuario,
+        articulos,
+        total,
+        estado,
         id,
     ];
     db_1.cxMysql.getConnection((err, connection) => {
@@ -83,37 +93,45 @@ const actualizarPedido = (req, res) => new Promise((resolve, reject) => {
             return;
         }
         else {
-            let sql = "UPDATE pedido SET articulo_id=?, usuario_id=?, estado=?, fecha_pedido=?, cantidad=?, precio_unitario=? WHERE id=?";
+            let sql = "UPDATE pedido SET usuario_id=?, fecha_pedido=?, telefono=?, direccion=?, metodo_pago=?, nombre_usuario=?, articulos=?, total=?, estado=? WHERE id=?";
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     console.error(err);
                     res.json({ message: "Error al actualizar " + err });
                 }
                 else {
-                    res.json({ message: "Pedido Actualizado con exito" });
+                    res.json({ message: "Pedido Actualizado con éxito" });
                 }
             });
         }
     });
 });
 exports.actualizarPedido = actualizarPedido;
+// Eliminar un pedido por su ID
 const eliminarPedido = (req, res) => new Promise((resolve, reject) => {
-    const idPedido = parseInt(req.params.id);
+    const pedidoId = parseInt(req.params.id);
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
             console.error(err);
             res.send(err);
             return;
         }
-        connection.query("DELETE FROM pedido WHERE id = ?", [idPedido], (err, results) => {
+        connection.query("DELETE FROM pedido WHERE id = ?", [pedidoId], (err, results) => {
             if (err) {
                 console.error(err);
                 res.json({ message: "Error al tratar de Eliminar" });
             }
             else {
-                res.json({ message: "Pedido Eliminado con exito" });
+                res.json({ message: "Pedido Eliminado con éxito" });
             }
         });
     });
 });
 exports.eliminarPedido = eliminarPedido;
+exports.default = {
+    getPedidos: exports.getPedidos,
+    getPedidoXID: exports.getPedidoXID,
+    insertPedido: exports.insertPedido,
+    actualizarPedido: exports.actualizarPedido,
+    eliminarPedido: exports.eliminarPedido,
+};
