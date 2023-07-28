@@ -5,7 +5,6 @@ import routes from "./routes/articulo";
 import authRoutes from "./routes/auth";
 import pedidoController from "./routes/pedido";
 
-// ADD THIS
 var cors = require("cors");
 app.use(cors());
 

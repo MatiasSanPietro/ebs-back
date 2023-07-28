@@ -9,7 +9,6 @@ const app = (0, express_1.default)();
 const articulo_1 = __importDefault(require("./routes/articulo"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const pedido_1 = __importDefault(require("./routes/pedido"));
-// ADD THIS
 var cors = require("cors");
 app.use(cors());
 app.use(express_1.default.json());

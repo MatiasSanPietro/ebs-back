@@ -11,10 +11,15 @@ export const getPedidos = (_req: Request, res: Response) =>
         return;
       }
       console.log("MySQL Connection: ", connection.threadId);
-      connection.query("SELECT * FROM pedido", (err, results) => {
-        if (err) console.error(err);
-        res.send(results);
-      });
+      try {
+        connection.query("SELECT * FROM pedido", (err, results) => {
+          if (err) throw err;
+          res.send(results);
+        });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     });
   });
 
@@ -28,14 +33,19 @@ export const getPedidoXID = (req: Request, res: Response) =>
         res.send(err);
         return;
       }
-      connection.query(
-        "SELECT * FROM pedido WHERE id = ?",
-        [pedidoId],
-        (err, results) => {
-          if (err) console.error(err);
-          res.send(results);
-        }
-      );
+      try {
+        connection.query(
+          "SELECT * FROM pedido WHERE id = ?",
+          [pedidoId],
+          (err, results) => {
+            if (err) throw err;
+            res.send(results);
+          }
+        );
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     });
   });
 
@@ -72,14 +82,15 @@ export const insertPedido = (req: Request, res: Response) =>
       } else {
         let sql =
           "INSERT INTO pedido (usuario_id, fecha_pedido, telefono, direccion, metodo_pago, nombre_usuario, articulos, total, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        connection.query(sql, values, (err, results) => {
-          if (err) {
-            console.error(err);
-            res.json({ message: "Error al tratar de insertar" });
-          } else {
+        try {
+          connection.query(sql, values, (err, results) => {
+            if (err) throw err;
             res.json({ message: "Pedido Insertado con éxito" });
-          }
-        });
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Internal Server Error" });
+        }
       }
     });
   });
@@ -119,14 +130,15 @@ export const actualizarPedido = (req: Request, res: Response) =>
       } else {
         let sql =
           "UPDATE pedido SET usuario_id=?, fecha_pedido=?, telefono=?, direccion=?, metodo_pago=?, nombre_usuario=?, articulos=?, total=?, estado=? WHERE id=?";
-        connection.query(sql, values, (err, results) => {
-          if (err) {
-            console.error(err);
-            res.json({ message: "Error al actualizar " + err });
-          } else {
+        try {
+          connection.query(sql, values, (err, results) => {
+            if (err) throw err;
             res.json({ message: "Pedido Actualizado con éxito" });
-          }
-        });
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Internal Server Error" });
+        }
       }
     });
   });
@@ -141,18 +153,19 @@ export const eliminarPedido = (req: Request, res: Response) =>
         res.send(err);
         return;
       }
-      connection.query(
-        "DELETE FROM pedido WHERE id = ?",
-        [pedidoId],
-        (err, results) => {
-          if (err) {
-            console.error(err);
-            res.json({ message: "Error al tratar de Eliminar" });
-          } else {
+      try {
+        connection.query(
+          "DELETE FROM pedido WHERE id = ?",
+          [pedidoId],
+          (err, results) => {
+            if (err) throw err;
             res.json({ message: "Pedido Eliminado con éxito" });
           }
-        }
-      );
+        );
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     });
   });
 
@@ -165,18 +178,19 @@ export const getLastPedidoByUserId = (req: Request, res: Response) => {
       res.send(err);
       return;
     }
-    connection.query(
-      "SELECT * FROM pedido WHERE usuario_id = ? ORDER BY id DESC LIMIT 1",
-      [userId],
-      (err, results) => {
-        if (err) {
-          console.error(err);
-          res.send(err);
-        } else {
+    try {
+      connection.query(
+        "SELECT * FROM pedido WHERE usuario_id = ? ORDER BY id DESC LIMIT 1",
+        [userId],
+        (err, results) => {
+          if (err) throw err;
           res.send(results);
         }
-      }
-    );
+      );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   });
 };
 
