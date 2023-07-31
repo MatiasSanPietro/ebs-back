@@ -50,8 +50,24 @@ export const getArticuloXID = (req: Request, res: Response) =>
 
 export const insertArticulo = (req: Request, res: Response) =>
   new Promise((resolve, reject) => {
-    const { imagen, descr, precio, rubro, titulo, rubro_secundario } = req.body;
-    var values = [imagen, descr, precio, rubro, titulo, rubro_secundario];
+    const {
+      imagen,
+      descr,
+      precio,
+      rubro,
+      titulo,
+      rubro_secundario,
+      ingrediente,
+    } = req.body;
+    var values = [
+      imagen,
+      descr,
+      precio,
+      rubro,
+      titulo,
+      rubro_secundario,
+      ingrediente,
+    ];
     cxMysql.getConnection((err, connection) => {
       if (err) {
         console.error(err);
@@ -59,7 +75,7 @@ export const insertArticulo = (req: Request, res: Response) =>
         return;
       } else {
         let sql: string =
-          "INSERT INTO articulo(imagen, descr, precio, rubro, titulo, rubro_secundario) VALUES (?, ?, ?, ?, ?, ?)";
+          "INSERT INTO articulo(imagen, descr, precio, rubro, titulo, rubro_secundario, ingrediente) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
           connection.query(sql, values, (err, results) => {
             if (err) {
@@ -79,9 +95,26 @@ export const insertArticulo = (req: Request, res: Response) =>
 
 export const actualizarArticulo = (req: Request, res: Response) =>
   new Promise((resolve, reject) => {
-    const { imagen, descr, precio, rubro, titulo, rubro_secundario, id } =
-      req.body;
-    var values = [imagen, descr, precio, rubro, titulo, rubro_secundario, id];
+    const {
+      imagen,
+      descr,
+      precio,
+      rubro,
+      titulo,
+      rubro_secundario,
+      ingrediente,
+      id,
+    } = req.body;
+    var values = [
+      imagen,
+      descr,
+      precio,
+      rubro,
+      titulo,
+      rubro_secundario,
+      ingrediente,
+      id,
+    ];
     cxMysql.getConnection((err, connection) => {
       if (err) {
         console.error(err);
@@ -89,7 +122,7 @@ export const actualizarArticulo = (req: Request, res: Response) =>
         return;
       } else {
         let sql: string =
-          "UPDATE articulo SET imagen=?, descr=?, precio=?, rubro=?, titulo=?, rubro_secundario=? WHERE id=?";
+          "UPDATE articulo SET imagen=?, descr=?, precio=?, rubro=?, titulo=?, rubro_secundario=?, ingrediente=? WHERE id=?";
         try {
           connection.query(sql, values, (err, results) => {
             if (err) {

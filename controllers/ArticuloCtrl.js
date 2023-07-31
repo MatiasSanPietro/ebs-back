@@ -48,8 +48,16 @@ const getArticuloXID = (req, res) => new Promise((resolve, reject) => {
 });
 exports.getArticuloXID = getArticuloXID;
 const insertArticulo = (req, res) => new Promise((resolve, reject) => {
-    const { imagen, descr, precio, rubro, titulo, rubro_secundario } = req.body;
-    var values = [imagen, descr, precio, rubro, titulo, rubro_secundario];
+    const { imagen, descr, precio, rubro, titulo, rubro_secundario, ingrediente, } = req.body;
+    var values = [
+        imagen,
+        descr,
+        precio,
+        rubro,
+        titulo,
+        rubro_secundario,
+        ingrediente,
+    ];
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
             console.error(err);
@@ -57,7 +65,7 @@ const insertArticulo = (req, res) => new Promise((resolve, reject) => {
             return;
         }
         else {
-            let sql = "INSERT INTO articulo(imagen, descr, precio, rubro, titulo, rubro_secundario) VALUES (?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO articulo(imagen, descr, precio, rubro, titulo, rubro_secundario, ingrediente) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try {
                 connection.query(sql, values, (err, results) => {
                     if (err) {
@@ -78,8 +86,17 @@ const insertArticulo = (req, res) => new Promise((resolve, reject) => {
 });
 exports.insertArticulo = insertArticulo;
 const actualizarArticulo = (req, res) => new Promise((resolve, reject) => {
-    const { imagen, descr, precio, rubro, titulo, rubro_secundario, id } = req.body;
-    var values = [imagen, descr, precio, rubro, titulo, rubro_secundario, id];
+    const { imagen, descr, precio, rubro, titulo, rubro_secundario, ingrediente, id, } = req.body;
+    var values = [
+        imagen,
+        descr,
+        precio,
+        rubro,
+        titulo,
+        rubro_secundario,
+        ingrediente,
+        id,
+    ];
     db_1.cxMysql.getConnection((err, connection) => {
         if (err) {
             console.error(err);
@@ -87,7 +104,7 @@ const actualizarArticulo = (req, res) => new Promise((resolve, reject) => {
             return;
         }
         else {
-            let sql = "UPDATE articulo SET imagen=?, descr=?, precio=?, rubro=?, titulo=?, rubro_secundario=? WHERE id=?";
+            let sql = "UPDATE articulo SET imagen=?, descr=?, precio=?, rubro=?, titulo=?, rubro_secundario=?, ingrediente=? WHERE id=?";
             try {
                 connection.query(sql, values, (err, results) => {
                     if (err) {

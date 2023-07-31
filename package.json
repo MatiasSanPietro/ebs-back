@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"tsc --watch\" \"nodemon app.js\"",
-    "start": "npm run dev"
+    "dev": "npm run dev",
+    "start": "node app.js"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
